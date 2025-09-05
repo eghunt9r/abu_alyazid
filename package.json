@@ -10,5 +10,11 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
+    {
+  "scripts": {
+    "build": "[my-framework] build --output public"
   }
+}
+  }
+
 }
