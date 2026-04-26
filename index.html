@@ -1,65 +1,534 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قائمة ذكر</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Egyptians Youth Entity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
+        /* ══════════════════════════════════════════════════
+   🛠️ DEVELOPER CONFIG — Edit values in the <script>
+      block at the bottom to change logo & links.
+   ══════════════════════════════════════════════════ */
+
+        /* ── Dark Theme ── */
+        [data-theme="dark"] {
+            --bg-overlay: linear-gradient(160deg, rgba(5, 15, 40, 0.88) 0%, rgba(13, 46, 110, 0.78) 50%, rgba(5, 15, 40, 0.92) 100%);
+            --surface: rgba(255, 255, 255, 0.09);
+            --surface-hover: rgba(255, 255, 255, 0.16);
+            --border: rgba(255, 255, 255, 0.18);
+            --text-main: #ffffff;
+            --text-sub: #93c5fd;
+            --footer-color: rgba(255, 255, 255, 0.30);
+            --toggle-bg: rgba(255, 255, 255, 0.12);
+            --logo-bg: #0d2e6e;
+            --logo-border: #60a5fa;
+            --logo-text-clr: #60a5fa;
+            --card-shadow: 0 10px 36px rgba(5, 15, 40, 0.55);
+        }
+
+        /* ── Light Theme ── */
+        [data-theme="light"] {
+            --bg-overlay: linear-gradient(160deg, rgba(219, 234, 254, 0.84) 0%, rgba(255, 255, 255, 0.74) 50%, rgba(219, 234, 254, 0.90) 100%);
+            --surface: rgba(255, 255, 255, 0.58);
+            --surface-hover: rgba(255, 255, 255, 0.82);
+            --border: rgba(37, 99, 235, 0.22);
+            --text-main: #0d2e6e;
+            --text-sub: #1a4aaa;
+            --footer-color: rgba(13, 46, 110, 0.42);
+            --toggle-bg: rgba(13, 46, 110, 0.10);
+            --logo-bg: #ffffff;
+            --logo-border: #2563eb;
+            --logo-text-clr: #0d2e6e;
+            --card-shadow: 0 10px 36px rgba(37, 99, 235, 0.14);
+        }
+
+        /* ── Reset ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: #121212;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Cairo', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ── Background ──
+   🛠️ DEVELOPER: Replace the URL to change the background image.
+── */
+        #bg-layer {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background-image: url('https://scontent.fcai21-3.fna.fbcdn.net/v/t39.30808-6/568101613_122151444308844391_9189049613236567255_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=7b2446&_nc_ohc=pcmUqi5NbxcQ7kNvwEo1CjF&_nc_oc=AdprnbldDJRixzONnrY1AfBi3JHDJtUGUIaDLcdVSzxsO1Jh7aEMSX_vaK59tclKrd4&_nc_zt=23&_nc_ht=scontent.fcai21-3.fna&_nc_gid=hZfTZaBiSXT0srWGXsNiUg&_nc_ss=7b2a8&oh=00_Af0__cjfcf4uxqX0rHf8XXLAgyHCh3xQBbPl3EAF0PuWWQ&oe=69F409D7');
+            background-size: cover;
+            background-position: center;
+        }
+
+        #bg-layer::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--bg-overlay);
+            transition: background 0.4s ease;
+        }
+
+        /* ── Toggle Button ── */
+        .theme-toggle {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 100;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border);
+            background: var(--toggle-bg);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 21px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+            transition: transform 0.2s, background 0.35s, border-color 0.35s;
+            user-select: none;
+            line-height: 1;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.12);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.92);
+        }
+
+        /* ── Container ── */
+        .container {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
+            padding: 30px 18px 48px;
+            gap: 22px;
         }
-        .container { width: 85%; text-align: center; }
-        h2 { margin-bottom: 25px; color: #f1f1f1; font-size: 24px; }
-        .btn {
-            width: 100%;
-            padding: 18px;
-            margin: 12px 0;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+
+        /* ── Header ── */
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            animation: fadeDown 0.7s ease both;
+        }
+
+        /* ── Logo Ring ── */
+        .logo-ring {
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            border: 3px solid var(--logo-border);
+            box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.14), 0 8px 30px rgba(13, 46, 110, 0.4);
+            overflow: hidden;
+            background: var(--logo-bg);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            transition: border-color 0.35s, background 0.35s, box-shadow 0.35s;
+            flex-shrink: 0;
         }
-        .btn:active { transform: scale(0.96); }
-        /* تدرجات الألوان الاحترافية */
-        .blue-grade { background: linear-gradient(135deg, #0072ff 0%, #00c6ff 100%); }
-        .green-grade { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
-        .orange-grade { background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%); }
-        .red-grade { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); }
+
+        .logo-ring img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ── Logo Text style ──
+   🛠️ DEVELOPER: Customize the text logo appearance here */
+        .logo-text {
+            font-family: 'Cairo', sans-serif;
+            font-weight: 900;
+            font-size: 1.85rem;
+            color: var(--logo-text-clr);
+            letter-spacing: -1px;
+            line-height: 1;
+            text-align: center;
+            user-select: none;
+            transition: color 0.35s;
+        }
+
+        .header-text h1 {
+            font-weight: 900;
+            font-size: 1.32rem;
+            color: var(--text-main);
+            text-align: center;
+            transition: color 0.35s;
+        }
+
+        .header-text p {
+            font-size: 0.74rem;
+            color: var(--text-sub);
+            text-align: center;
+            font-weight: 600;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-top: 2px;
+            transition: color 0.35s;
+        }
+
+        .stars-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .star {
+            color: #f0c040;
+            font-size: 13px;
+        }
+
+        .divider-ln {
+            width: 38px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #60a5fa, transparent);
+            border-radius: 2px;
+        }
+
+        /* ── Cards ── */
+        .cards-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 15px 20px;
+            border-radius: 18px;
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            animation: fadeUp 0.6s ease both;
+            transition: transform 0.22s cubic-bezier(.34, 1.56, .64, 1),
+                box-shadow 0.22s ease,
+                background 0.35s,
+                border-color 0.35s;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.07) 0%, transparent 55%);
+            pointer-events: none;
+        }
+
+        .card:nth-child(1) {
+            animation-delay: .10s
+        }
+
+        .card:nth-child(2) {
+            animation-delay: .18s
+        }
+
+        .card:nth-child(3) {
+            animation-delay: .26s
+        }
+
+        .card:nth-child(4) {
+            animation-delay: .34s
+        }
+
+        .card:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--card-shadow);
+            background: var(--surface-hover);
+        }
+
+        .card:active {
+            transform: scale(0.97);
+        }
+
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+        }
+
+        .card-icon svg {
+            width: 27px;
+            height: 27px;
+        }
+
+        .card-info {
+            flex: 1;
+        }
+
+        .card-info .platform {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+            line-height: 1.2;
+            transition: color 0.35s;
+        }
+
+        .card-info .handle {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            font-weight: 400;
+            margin-top: 2px;
+            transition: color 0.35s;
+        }
+
+        .card-arrow {
+            color: var(--text-sub);
+            font-size: 18px;
+            opacity: 0.7;
+            flex-shrink: 0;
+            transition: transform 0.2s, opacity 0.2s, color 0.35s;
+        }
+
+        .card:hover .card-arrow {
+            transform: translateX(-5px);
+            opacity: 1;
+        }
+
+        /* Platform icon gradients */
+        .icon-facebook {
+            background: linear-gradient(135deg, #1877f2, #0c5fc7);
+        }
+
+        .icon-instagram {
+            background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
+        }
+
+        .icon-tiktok {
+            background: linear-gradient(135deg, #111, #69c9d0);
+        }
+
+        .icon-linkedin {
+            background: linear-gradient(135deg, #0077b5, #00a0dc);
+        }
+
+        /* ── Footer ── */
+        .footer {
+            color: var(--footer-color);
+            font-size: 0.70rem;
+            text-align: center;
+            line-height: 1.8;
+            animation: fadeUp 0.8s ease 0.5s both;
+            transition: color 0.35s;
+        }
+
+        /* ── Animations ── */
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-18px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
     </style>
 </head>
+
 <body>
+
+    <div id="bg-layer"></div>
+
+    <!-- Dark / Light Toggle -->
+    <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙</button>
+
     <div class="container">
-        <h2>قائمة ذكر الملونة ✨</h2>
-        <button class="btn blue-grade" onclick="send('choose_reader')">🎧 اختيار القارئ</button>
-        <button class="btn green-grade" onclick="send('get_azkar')">📿 أذكار المسلم</button>
-        <button class="btn orange-grade" onclick="send('get_dua')">🤲 أدعية مختارة</button>
-        <button class="btn red-grade" onclick="tg.close()">❌ إغلاق القائمة</button>
+
+        <div class="header">
+            <div class="logo-ring" id="logo-ring"></div>
+            <div class="header-text">
+                <h1>المصريون الشباب محافظه الغربيه</h1>
+                <p>Egyptians Youth Entity</p>
+            </div>
+            <div class="stars-row">
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <div class="divider-ln"></div>
+                <span class="star">★</span>
+                <span class="star">★</span>
+            </div>
+        </div>
+
+        <div class="cards-grid" id="cards-grid"></div>
+
+        <div class="footer">
+            المصريون الشباب — وزارة الشباب والرياضة<br>
+            Egyptians Youth Entity © 2025
+        </div>
+
     </div>
 
     <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand(); // لفتح الصفحة كاملة
-        function send(data) {
-            tg.sendData(data); // إرسال الداتا للبوت
+        /* ══════════════════════════════════════════════════
+           🛠️ DEVELOPER CONFIG — Edit freely below
+           ══════════════════════════════════════════════════ */
+
+        // ── LOGO ──────────────────────────────────────────
+        // Set type to 'text' for initials/text logo,
+        // or 'image' and provide a URL for an image logo.
+        const LOGO = {
+            type: 'image',             // 'text' | 'image'
+            text: 'EYE',             // shown when type = 'text'
+            src: 'https://raw.githubusercontent.com/eghunt9r/abu_alyazid/refs/heads/main/p.jpg',  // shown when type = 'image'
+        };
+
+        // ── SOCIAL LINKS ───────────────────────────────────
+        // Replace each href with your real page URL.
+        const LINKS = [
+            {
+                id: 'facebook',
+                nameAr: 'فيسبوك',
+                nameEn: 'Facebook',
+                href: 'https://www.facebook.com/share/1CCHycEifq/',
+                iconClass: 'icon-facebook',
+                svg: '<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>',
+            },
+            {
+                id: 'instagram',
+                nameAr: 'إنستغرام',
+                nameEn: 'Instagram',
+                href: 'https://www.instagram.com/almasrywnalshabab?igsh=YWhwdmt3bHI1bDR4',
+                iconClass: 'icon-instagram',
+                svg: '<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>',
+            },
+            {
+                id: 'tiktok',
+                nameAr: 'تيك توك',
+                nameEn: 'TikTok',
+                href: 'https://www.tiktok.com/@almsrywnalshbabb?_r=1&_t=ZS-941YAARcQey',
+                iconClass: 'icon-tiktok',
+                svg: '<path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>',
+            },
+            {
+                id: 'linkedin',
+                nameAr: 'لينكد إن',
+                nameEn: 'LinkedIn',
+                href: 'https://www.linkedin.com/company/eye-ministry-of-youth-and-sports-of-egypt/',
+                iconClass: 'icon-linkedin',
+                svg: '<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>',
+            },
+        ];
+
+        /* ══════════════════════════════════════════════════
+           Runtime — Do not edit below
+           ══════════════════════════════════════════════════ */
+
+        // Inject Logo
+        (function () {
+            const ring = document.getElementById('logo-ring');
+            if (LOGO.type === 'image') {
+                const img = document.createElement('img');
+                img.src = LOGO.src;
+                img.alt = 'Logo';
+                ring.appendChild(img);
+            } else {
+                const span = document.createElement('span');
+                span.className = 'logo-text';
+                span.textContent = LOGO.text;
+                ring.appendChild(span);
+            }
+        })();
+
+        // Inject Cards
+        (function () {
+            const grid = document.getElementById('cards-grid');
+            LINKS.forEach(link => {
+                grid.innerHTML += `
+      <a class="card" href="${link.href}" target="_blank">
+        <div class="card-icon ${link.iconClass}">
+          <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">${link.svg}</svg>
+        </div>
+        <div class="card-info">
+          <div class="platform">${link.nameAr}</div>
+          <div class="handle">${link.nameEn}</div>
+        </div>
+        <div class="card-arrow">←</div>
+      </a>`;
+            });
+        })();
+
+        // Dark / Light Toggle
+        const html = document.documentElement;
+        const btn = document.getElementById('themeBtn');
+        let isDark = true;
+
+        // Restore saved preference or respect system
+        const saved = localStorage.getItem('eye-theme');
+        if (saved) {
+            isDark = saved === 'dark';
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+            isDark = false;
+        }
+        applyTheme();
+
+        function toggleTheme() {
+            isDark = !isDark;
+            applyTheme();
+            localStorage.setItem('eye-theme', isDark ? 'dark' : 'light');
+        }
+
+        function applyTheme() {
+            html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            btn.textContent = isDark ? '🌙' : '☀️';
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.setHeaderColor(isDark ? '#05102a' : '#dbeafe');
+            }
+        }
+
+        // Telegram Mini App
+        if (window.Telegram && window.Telegram.WebApp) {
+            const tg = window.Telegram.WebApp;
+            tg.ready();
+            tg.expand();
         }
     </script>
 </body>
+
 </html>
